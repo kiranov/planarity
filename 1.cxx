@@ -19,7 +19,7 @@ public:
 		current++;
 	}
 	int pop(){
-		int ret = arr[current];
+		int ret = arr[current-1];
 		current--;
 		return ret;
 	}
@@ -28,6 +28,9 @@ public:
 		while(current != 0){
 			v = pop();
 		}
+	}
+	int val(){
+		return arr[current-1];
 	}
 };
 
@@ -80,22 +83,28 @@ public:
 			matrix[from][to] = 1;
 			matrix[to][from] = matrix[from][to];
 	}
-	/*void cycle(int v, stack * s){
+	void cycle(size_t v, stack * s){
+		cout << "vertex: " << v << endl;
+		int previous = s->val();
 		colour[v] = 1;
 		s->push(v);
 		size_t i = 0;
 		for(i = 0; i < size; i++){
-			if(this->matrix[v][i] == 1){
-				if(colour[i] == 0){
-					cycle(i, s);
-				}
-				if(colour[i] == 1){
-					cout << i;
+			if(i != previous){
+				if(this->matrix[v][i] == 1){
+					if(colour[i] == 0){
+						cout << "go to: " << i << endl; 
+						cycle(i, s);
+					}
+					if((colour[i] == 1) && (i != v)){
+						cout << i << endl;
+						break;
+					}
 				}
 			}
 		}
 		colour[i] = 2;
-	}*/
+	}
 };
 
 int main(int argc, char **argv)
@@ -113,16 +122,24 @@ int main(int argc, char **argv)
 	A.AddEdge(4, 6);
 	A.AddEdge(4, 5);
 	A.AddEdge(5, 6);
+	Graph B(3);
+	B.AddEdge(0,1);
+	B.AddEdge(1, 2);
+	B.AddEdge(2, 0);
 	
 	A.print();
 	stack s(7);
-	s.push(0);
+	/*s.push(0);
 	s.push(1);
-	int a = s.pop();
+	int a = s.val();
 	cout << a << endl;
 	a = s.pop();
-	cout << a;
-	//A.cycle(0,&s);
+	cout << a;*/
+	A.cycle(0,&s);
+	for(int i = 0; i < 4; i++){
+		int a = s.pop();
+		cout << a << " ";
+	}
 	return 0;
 }
 
